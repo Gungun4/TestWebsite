@@ -1,0 +1,40 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+    <link href="/static/css/jquery-confirm.min.css" rel="stylesheet" media="screen">
+
+    <script src="/static/js/jquery.js" type="text/javascript"></script>
+    <script src="/static/js/jquery-min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery-confirm.js" type="text/javascript"></script>
+    <script src="/static/js/index.js" type="text/javascript"></script>
+
+</head>
+<body>
+{#<div class="boxa">#}
+{#    <span>执行脚本</span>#}
+{#    <span>运行记录</span>#}
+{#</div>#}
+<div class="boxb">
+    <br/>
+    <table class="hovertable">
+        <th>序号</th>
+        <th>模块</th>
+        <th>脚本</th>
+        <th>报告文件</th>
+        <th>操作</th>
+        {% set num = 0 %}
+        {% for i in data %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ i[0] }}</td>
+                <td>{{ i[1] }}</td>
+                <td class="report">{{ i[2] }}</td>
+                <td class="run" data={{ i[0] }}>运行</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>
