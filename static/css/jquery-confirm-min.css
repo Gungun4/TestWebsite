@@ -64,13 +64,13 @@ body[class*=jconfirm-no-scroll-] {
     -webkit-perspective-origin: center;
     perspective-origin: center;
     display: table;
-    width: 50%;
+    width: 100%;
     height: 100%;
 }
 
 .jconfirm .jconfirm-row {
     display: table-row;
-    width: 50%;
+    width: 100%;
 }
 
 .jconfirm .jconfirm-cell {
@@ -98,14 +98,12 @@ body[class*=jconfirm-no-scroll-] {
 .jconfirm .jconfirm-box {
     background: white;
     border-radius: 4px;
-    /*position: relative;*/
-    position: absolute;
+    position: relative;
     outline: none;
     padding: 15px 15px 0;
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
-
 }
 
 @-webkit-keyframes type-blue {
@@ -391,7 +389,7 @@ body[class*=jconfirm-no-scroll-] {
     -webkit-transition: height 0.4s ease-in;
     transition: height 0.4s ease-in;
     display: inline-block;
-    width: 50%;
+    width: 100%;
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
@@ -419,7 +417,7 @@ body[class*=jconfirm-no-scroll-] {
 }
 
 .jconfirm .jconfirm-box div.jconfirm-content-pane .jconfirm-content img {
-    max-width: 50%;
+    max-width: 100%;
     height: auto;
 }
 

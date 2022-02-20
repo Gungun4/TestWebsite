@@ -1,23 +1,32 @@
+import sys
+import logging
 import redis
 from flask import Flask, render_template, jsonify, request
 from src.test_redis import GetCom
 import os
+from configparser import ConfigParser
 
+logging.basicConfig(level=logging.DEBUG)
 r = redis.Redis(host='127.0.0.1', port=6379, db=4, decode_responses=True)
 app = Flask(__name__)
+app.debug = True
 
-file_dir = r"D:\PycharmProjects\AutomatedTesting\test_cases"
+cf = ConfigParser()
+cf.read("D:/PythonPro/TestWebsite/config/config.ini")
+case_path = cf.get("PATH", "case_path")
+
+
 
 @app.route('/', methods=["GET", "POST"])
 def hello_world():  # put application's code here
     res = {
         "data": []
     }
-    for root, dirs, files in os.walk(file_dir):
+    for root, dirs, files in os.walk(case_path):
         for file in files:
-            if os.path.splitext(file)[1] == '.py':  # 想要保存的文件格式
-                print(file)
-                l= ["智慧安监",file,file.replace(".py","报告")]
+            if os.path.splitext(file)[1] == '.py':
+                app.logger.info(file,'---------------------------------')
+                l = ["智慧安监", file, file.replace(".py", "报告")]
                 res["data"].append(l)
     return render_template('index.html', **res)
 
@@ -49,4 +58,9 @@ def get_list():
 
 
 if __name__ == '__main__':
+    for root, dirs, files in os.walk(case_path):
+        for file in files:
+            if os.path.splitext(file)[1] == '.py':
+                print(file, '---------------------------------')
+                ll = ["智慧安监", file, file.replace(".py", "报告")]
     app.run()
