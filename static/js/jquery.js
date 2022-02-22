@@ -5221,7 +5221,7 @@ jQuery.event = {
 			handler.guid = jQuery.guid++;
 		}
 
-		// Init the element's event structure and main handler, if this is the first
+		// Init the element's event structure and api handler, if this is the first
 		if ( !( events = elemData.events ) ) {
 			events = elemData.events = Object.create( null );
 		}
@@ -6833,7 +6833,7 @@ function getWidthOrHeight( elem, dimension, extra ) {
 	// Normalize "" and auto
 	val = parseFloat( val ) || 0;
 
-	// Adjust for the element's box model
+	// Adjust for the element's box api
 	return ( val +
 		boxModelAdjustment(
 			elem,

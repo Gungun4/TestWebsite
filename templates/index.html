@@ -11,28 +11,67 @@
 
 </head>
 <body>
+<div class="boxc">
+    <div class="boxc-1">
+        <span class="stxt" style="margin: 0 0 0 0">测试</span>
+    </div>
+</div>
 <div class="boxa">
-    <span class="ssvg"><?xml version="1.0" encoding="UTF-8"?><svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" fill="white" fill-opacity="0.01"/><mask id="icon-e43e75461b9f784" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48" style="mask-type: alpha"><rect width="48" height="48" fill="#333"/></mask><g mask="url(#icon-e43e75461b9f784)"><path d="M6 24.0083V42H42V24" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M33 15L24 6L15 15" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M23.9917 32V6" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g></svg></span>
-    <span>上传</span>
+    <span class="ssvg"><?xml version="1.0" encoding="UTF-8"?>
+        <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48"
+                                                                                                             height="48"
+                                                                                                             fill="white"
+                                                                                                             fill-opacity="0.01"/><mask
+                id="icon-e43e75461b9f784" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"
+                style="mask-type: alpha"><rect width="48" height="48" fill="#333"/></mask><g
+                mask="url(#icon-e43e75461b9f784)"><path d="M6 24.0083V42H42V24" stroke="#FFFAFA" stroke-width="4"
+                                                        stroke-linecap="round" stroke-linejoin="round"/><path
+                d="M33 15L24 6L15 15" stroke="#FFFAFA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path
+                d="M23.9917 32V6" stroke="#FFFAFA" stroke-width="4" stroke-linecap="round"
+                stroke-linejoin="round"/></g></svg></span>
+    <span class="stxt">上传</span>
 </div>
 <div class="boxb">
     <table class="hovertable">
-        <th>序号</th>
-        <th>模块</th>
-        <th>脚本</th>
-        <th>报告文件</th>
-        <th>操作</th>
-        {% set num = 0 %}
-        {% for i in data %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ i[0] }}</td>
-                <td>{{ i[1] }}</td>
-                <td class="report"><a>{{ i[2] }}</a></td>
-                <td class="run" data={{ i[1] }}>运行</td>
-            </tr>
-        {% endfor %}
+        <thead>
+        <tr>
+            <th style="width: 100px">序号</th>
+            <th style="width: 125px">项目</th>
+            <th style="width: 125px">模块</th>
+            <th style="width: 550px">脚本</th>
+            <th style="width: 550px">报告文件</th>
+            <th>操作</th>
+        </tr>
+        </thead>
     </table>
+    <div style="height: 91%;overflow: auto;box-sizing: border-box">
+        <table class="hovertable">
+            <tbody>
+            {% set num = 0 %}
+            {% for i in data %}
+                {% if loop.index == 1 %}
+                    <tr>
+                        <td style="width: 100px">{{ loop.index }}</td>
+                        <td style="width: 125px">{{ i[0] }}</td>
+                        <td style="width: 125px">{{ i[1] }}</td>
+                        <td style="width: 550px">{{ i[2] }}</td>
+                        <td class="report" style="width: 550px">{{ i[3] }}</td>
+                        <td class="run" data={{ i[0] }}>运行</td>
+                    </tr>{% else %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ i[0] }}</td>
+                        <td>{{ i[1] }}</td>
+                        <td>{{ i[2] }}</td>
+                        <td class="report">{{ i[3] }}</td>
+                        <td class="run" data={{ i[0] }}>运行</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
+
 </html>

@@ -129,8 +129,8 @@ $(document).on("click", ".run",
                 success: function (result) {
                     if (result.code === 100) {
                         alert("执行成功")
-                    }else {
-                        alert("调试文件不可执行", false,false)
+                    } else {
+                        alert("调试文件不可执行", false, false)
                     }
                 },
                 error: function () {
@@ -140,7 +140,7 @@ $(document).on("click", ".run",
             })
         }
     })
-
+//打开报告文件
 $(document).on("click", ".report",
     function () {
         var file_name = $(this).text()
@@ -148,9 +148,26 @@ $(document).on("click", ".report",
         window.open("../static/report/" + file_name)
     })
 
-$(document).on("mouseover", ".report",
-    function () {
-        $(".us").show("点击跳转")
-
-    }
-)
+$(document).on({
+    mouseover:
+        function (e) {
+            console.log($(this).offset().top);
+            var y = $(this).offset().top - 75;
+            var x = $(this).offset().left + 170;
+            $("body").append("<div class='tip bottom' style=\"top:"+ y + "px;left:" + x + "px;position: absolute\">点击打开报告文件</div>");
+        },
+    mouseout:
+        function () {
+            console.log("mouseout");
+            $(".tip").remove();
+        },
+    // mousemove:
+    //     function (e) {
+    //
+    //         $("#tip bottom").css({
+    //             "top": (y - 20) + "px",
+    //             "left": (x + 240) + "px",
+    //             "z-index":"99999"
+    //         })
+    //     }
+}, ".report")

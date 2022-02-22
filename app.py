@@ -5,13 +5,22 @@ from configparser import ConfigParser
 
 import redis
 from flask import Flask, render_template, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
 
 from src.test_redis import GetCom
 
 logging.basicConfig(level=logging.DEBUG)
 r = redis.Redis(host='127.0.0.1', port=6379, db=4, decode_responses=True)
+
 app = Flask(__name__)
+db = SQLAlchemy(app)
 app.debug = True
+
+
+class Config():
+    SQLALCHEMY_DATABASE_URI = "mysql://root:123456@127.0.0.1:3306/os_site"
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+app.config.from_object(Config)
 
 cf = ConfigParser()
 cf.read("D:/PycharmProjects/TestWebsite/config/config.ini")
@@ -22,13 +31,14 @@ report_path = cf.get("PATH", "report_path")
 
 @app.route('/', methods=["GET", "POST"])
 def hello_world():  # put application's code here
+    ip = request.remote_addr
     res = {
         "data": []
     }
     for root, dirs, files in os.walk(case_path):
         for file in files:
             if os.path.splitext(file)[1] == '.py':
-                l = ["智慧安监", file, file.replace(".py", ".html")]
+                l = ["智慧安监", "运维巡查", file, file.replace(".py", ".html")]
                 res["data"].append(l)
     return render_template('index.html', **res)
 
@@ -38,7 +48,7 @@ def hello_world():  # put application's code here
 def record():
     sid = json.loads(request.data)["case_name"]
     if "aj" not in sid:
-        res = {"code":200}
+        res = {"code": 200}
         return res
     g = GetCom(sid, script_path, "suiteMain.py")
     g.run()
