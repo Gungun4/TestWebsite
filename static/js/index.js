@@ -1,16 +1,15 @@
-// window.onload = $(function myFun() {
-//     $.ajax({
-//         url: "http://192.168.0.80:5000/api/v1/get_report",
-//         type: "post",
-//         success: function (result) {
-//             if (100 == result.code) {
-//                 console.log(result)
-//                 window.localStorage.setItem("data", result.data);
-//             }
-//
-//         }
-//     })
-// })
+window.onload = $(function myFun() {
+    $.ajax({
+        url: "http://192.168.0.80:5000/api/v1/ip",
+        type: "get",
+        success: function (result) {
+            if (100 === result.code) {
+               console.log('success')
+            }
+
+        }
+    })
+})
 // 运行脚本
 window.alert = function Alert(str) {
     var msgw, msgh, bordercolor;
@@ -151,14 +150,12 @@ $(document).on("click", ".report",
 $(document).on({
     mouseover:
         function (e) {
-            console.log($(this).offset().top);
             var y = $(this).offset().top - 75;
             var x = $(this).offset().left + 170;
             $("body").append("<div class='tip bottom' style=\"top:"+ y + "px;left:" + x + "px;position: absolute\">点击打开报告文件</div>");
         },
     mouseout:
         function () {
-            console.log("mouseout");
             $(".tip").remove();
         },
     // mousemove:
@@ -171,3 +168,8 @@ $(document).on({
     //         })
     //     }
 }, ".report")
+
+$(document).on("click", ".upload",function () {
+    $(".el-wrapper").css({"display":"block"})
+    console.log("click-upload")
+})

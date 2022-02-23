@@ -17,6 +17,7 @@
     </div>
 </div>
 <div class="boxa">
+    <div class="upload" style="z-index: 111">
     <span class="ssvg"><?xml version="1.0" encoding="UTF-8"?>
         <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48"
                                                                                                              height="48"
@@ -30,6 +31,7 @@
                 d="M23.9917 32V6" stroke="#FFFAFA" stroke-width="4" stroke-linecap="round"
                 stroke-linejoin="round"/></g></svg></span>
     <span class="stxt">上传</span>
+    </div>
 </div>
 <div class="boxb">
     <table class="hovertable">
@@ -70,6 +72,15 @@
             {% endfor %}
             </tbody>
         </table>
+    </div>
+</div>
+<div class="el-wrapper">
+    <div style="left: 45%;padding-top: 500px;width: 40%;height: 40%;position: absolute">
+        <form method="post">
+            <input type="file" value="文件">
+            <button type="submit" name="确定">确定</button>
+            <button type="button" name="取消">取消</button>
+        </form>
     </div>
 </div>
 </body>

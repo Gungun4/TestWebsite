@@ -1,26 +1,18 @@
-import json
-import logging
 import os
 from configparser import ConfigParser
 
-import redis
-from flask import Flask, render_template, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request
 
-from src.test_redis import GetCom
-
-logging.basicConfig(level=logging.DEBUG)
-r = redis.Redis(host='127.0.0.1', port=6379, db=4, decode_responses=True)
+import config
+from exts import db
+from api.api import api
 
 app = Flask(__name__)
-db = SQLAlchemy(app)
-app.debug = True
+app.register_blueprint(api, url_prefix='/api/v1')
+app.config.from_object(config)
+db.init_app(app)
+# app.debug = True
 
-
-class Config():
-    SQLALCHEMY_DATABASE_URI = "mysql://root:123456@127.0.0.1:3306/os_site"
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-app.config.from_object(Config)
 
 cf = ConfigParser()
 cf.read("D:/PycharmProjects/TestWebsite/config/config.ini")
@@ -40,43 +32,9 @@ def hello_world():  # put application's code here
             if os.path.splitext(file)[1] == '.py':
                 l = ["智慧安监", "运维巡查", file, file.replace(".py", ".html")]
                 res["data"].append(l)
+
     return render_template('index.html', **res)
 
 
-# 执行脚本
-@app.route('/api/v1/record', methods=["POST"])
-def record():
-    sid = json.loads(request.data)["case_name"]
-    if "aj" not in sid:
-        res = {"code": 200}
-        return res
-    g = GetCom(sid, script_path, "suiteMain.py")
-    g.run()
-    res = {"code": 100}
-    return jsonify(res)
-
-
-# 执行过程数据
-@app.route('/api/v1/getmsg', methods=["GET", "POST"])
-def getmsg(project):
-    data = r.rpop(project, 10)
-    return jsonify({"code": 100, "data": data})
-
-
-# 脚本
-@app.route('/api/v1/get_list', methods=["GET", "POST"])
-def get_list():
-    res = {"code": 100,
-           "data": [["1", "sjsj", "dfa.report"], ["1", "sjsj", "dfa.report"]]
-           }
-    if request.method == "POST":
-        return jsonify(res)
-
-
 if __name__ == '__main__':
-    for root, dirs, files in os.walk(case_path):
-        for file in files:
-            if os.path.splitext(file)[1] == '.py':
-                print(file, '---------------------------------')
-                ll = ["智慧安监", file, file.replace(".py", "报告")]
     app.run()
