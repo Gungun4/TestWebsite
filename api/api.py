@@ -119,6 +119,8 @@ def create_pm():
 
 @api.route("/get_list", methods=["GET"])
 def get_list():
-    data = request.args
-
-    return jsonify({"code": "100", "msg": ""})
+    if request.args["name"] == "case":
+        data = {"5": ["1a", "2b", "3x", "4d", "5f", "6e", "7g"]}
+    else:
+        data = {"6":["a","b","c","d","E"]}
+    return jsonify({"code": 100, "data": data, "msg": ""})

@@ -4,7 +4,7 @@ window.onload = $(function myFun() {
         type: "get",
         success: function (result) {
             if (100 === result.code) {
-               console.log('success')
+                console.log('success')
             }
 
         }
@@ -152,24 +152,84 @@ $(document).on({
         function (e) {
             var y = $(this).offset().top - 75;
             var x = $(this).offset().left + 170;
-            $("body").append("<div class='tip bottom' style=\"top:"+ y + "px;left:" + x + "px;position: absolute\">点击打开报告文件</div>");
+            $("body").append("<div class='tip bottom' style=\"top:" + y + "px;left:" + x + "px;position: absolute\">点击打开报告文件</div>");
         },
     mouseout:
         function () {
             $(".tip").remove();
         },
-    // mousemove:
-    //     function (e) {
-    //
-    //         $("#tip bottom").css({
-    //             "top": (y - 20) + "px",
-    //             "left": (x + 240) + "px",
-    //             "z-index":"99999"
-    //         })
-    //     }
 }, ".report")
 
-$(document).on("click", ".upload",function () {
-    $(".el-wrapper").css({"display":"block"})
+// 上传
+$(document).on("click", ".upload", function () {
+    $(".el-wrapper").css({"display": "block"})
     console.log("click-upload")
+})
+
+// 模块选择
+$(document).on("click", ".boxc-2", function () {
+    $(".boxc-2").css("background", "");
+    $(this).css("background", "black");
+    var name = $(this).attr("name")
+    var html_body = ""
+    if (name === "case") {
+        html_body += "<table class=\"hovertable\">\n" +
+            "        <thead>\n" +
+            "        <tr>\n" +
+            "            <th style=\"width: 5%\">序号</th>\n" +
+            "            <th style=\"width: 15%\">项目</th>\n" +
+            "            <th style=\"width: 15%\">模块</th>\n" +
+            "            <th style=\"width: 30%\">文件</th>\n" +
+            "            <th style=\"width: 30%\">时间</th>\n" +
+            "            <th>操作</th>\n" +
+            "        </tr>\n" +
+            "        </thead>\n" +
+            "    </table>\n"
+    } else {
+        html_body += "<table class=\"hovertable\">\n" +
+            "        <thead>\n" +
+            "        <tr>\n" +
+            "            <th style=\"width: 5%\">序号</th>\n" +
+            "            <th style=\"width: 15%\">项目</th>\n" +
+            "            <th style=\"width: 15%\">模块</th>\n" +
+            "            <th style=\"width: 30%\">脚本文件</th>\n" +
+            "            <th style=\"width: 30%\">报告文件</th>\n" +
+            "            <th>操作</th>\n" +
+            "        </tr>\n" +
+            "        </thead>\n" +
+            "    </table>\n"
+    }
+
+    $.ajax({
+        url: "/api/v1/get_list?name=" + name,
+        type: 'get',
+        success: function (result) {
+            if (result.code === 100) {
+                let data = result.data
+                html_body += "<div style=\"height: 91%;overflow: auto;box-sizing: border-box\">\n";
+                html_body += "<table class=\"hovertable\">\n";
+                html_body += "<tbody>\n";
+                console.log(data);
+                let n = 0
+                for (i in data) {
+                    n +=1
+                    console.log(data[i][1]);
+                    html_body += "<tr>\n" +
+                        "<td style=\"width: 5%\">" + n + "</td>\n" +
+                        "<td style=\"width: 15%\">" + data[i][0] + "</td>\n" +
+                        "<td style=\"width: 15%\">" + data[i][1] + "</td>\n" +
+                        "<td style=\"width: 30%\">" + data[i][2] + "</td>\n" +
+                        "<td class=\"report\" style=\"width: 30%\">" + data[i][3] + "</td>\n" +
+                        "<td class=\"run\" style='width:5%' data=\"" + i + "\">运行</td>\n" +
+                        "</tr>\n";
+                }
+                html_body += "</tbody>";
+                html_body += "</table>";
+                html_body += "</div>";
+                $(".boxb").html(html_body);
+            }
+        },
+    })
+
+    console.log("click .boxc-2", $(this).attr("name"))
 })
