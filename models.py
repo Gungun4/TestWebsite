@@ -61,6 +61,7 @@ class Documents(db.Model):
     upload_user = db.Column(db.String(20))
     upload_time = db.Column(db.DateTime, index=True, default=datetime.datetime.now, onupdate=datetime.datetime.now)
     status = db.Column(db.Enum("0", "1", "2"), server_default="0", nullable=False)
+    extension = db.Column(db.String(10))
 
     def __repr__(self):
         return f'<Documents>'

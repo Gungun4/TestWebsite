@@ -82,7 +82,7 @@ body{
     -ms-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    font-size: 25px;
+    font-size: 22px;
     color: white;
 }
 .el-wrapper{
@@ -94,9 +94,13 @@ body{
     overflow: hidden;
     margin: 0;
     display: none;
+    flex-direction:column;
+    justify-content: center;
     background-color: rgba(224, 231, 245, 0.31);
     z-index: 999;
 }
+
+
 table.hovertable {
     margin-bottom: -1px;
     font-family: verdana, arial, sans-serif;
@@ -222,7 +226,32 @@ table.hovertable td {
 ">#0099FF;
 }
 
+.form-div{
+    width: 435px;
+    height: 50%;
+    position: absolute;
+    margin-left: 750px;
+    margin-top: 15%;
+    border: black;
+}
 
+#upload button{
+    height: 6%;
+    width: 20%;
+    margin-top:10px;
+}
+#upload input{
+    height: 5%;
+    margin-top:10px;
+}
+#upload select{
+    height: 5%;
+    margin-top:10px;
+}
+#upload{
+    font-size: 20px;
+    margin-top:10px;
+}
 .run{
     color: #89c2f1;
 }

@@ -15,10 +15,10 @@
     <div class="boxc-1">
         <span class="stxt" style="margin: 0 0 0 0">测试</span>
     </div>
-    <div class="boxc-2" name="case">
+    <div class="boxc-2" name="0">
         <span  style="margin: 0 0 0 0">测试用例</span>
     </div>
-    <div class="boxc-2" name="script">
+    <div class="boxc-2" name="1">
         <span  style="margin: 0 0 0 0">测试脚本</span>
     </div>
 </div>
@@ -40,53 +40,19 @@
     </div>
 </div>
 <div class="boxb">
-{#    <table class="hovertable">#}
-{#        <thead>#}
-{#        <tr>#}
-{#            <th style="width: 100px">序号</th>#}
-{#            <th style="width: 125px">项目</th>#}
-{#            <th style="width: 125px">模块</th>#}
-{#            <th style="width: 550px">脚本</th>#}
-{#            <th style="width: 550px">报告文件</th>#}
-{#            <th>操作</th>#}
-{#        </tr>#}
-{#        </thead>#}
-{#    </table>#}
     <div style="height: 91%;overflow: auto;box-sizing: border-box">
         <table class="hovertable">
             <tbody>
-            {% set num = 0 %}
-            {% for i in data %}
-                {% if loop.index == 1 %}
-                    <tr>
-                        <td style="width: 100px">{{ loop.index }}</td>
-                        <td style="width: 125px">{{ i[0] }}</td>
-                        <td style="width: 125px">{{ i[1] }}</td>
-                        <td style="width: 550px">{{ i[2] }}</td>
-                        <td class="report" style="width: 550px">{{ i[3] }}</td>
-                        <td class="run" data={{ i[0] }}>运行</td>
-                    </tr>{% else %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ i[0] }}</td>
-                        <td>{{ i[1] }}</td>
-                        <td>{{ i[2] }}</td>
-                        <td class="report">{{ i[3] }}</td>
-                        <td class="run" data={{ i[0] }}>运行</td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
 <div class="el-wrapper">
-    <div style="left: 45%;padding-top: 500px;width: 40%;height: 40%;position: absolute">
-        <form method="post">
-            <input type="file" value="文件">
-            <button type="submit" name="确定">确定</button>
-            <button type="button" name="取消">取消</button>
+    <div class="form-div">
+        <div style="width: 100%;height: 8%;text-align: center;background: #606266;font-size: 32px;letter-spacing: 6px;color: oldlace">文件上传</div>
+        <form id="upload" method="post" enctype="multipart/form-data" action="http://192.168.0.80:5000/api/v1/upload" target="targetIfr">
         </form>
+        <iframe name="targetIfr" style="display:none"></iframe>
     </div>
 </div>
 </body>

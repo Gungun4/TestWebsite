@@ -91,7 +91,7 @@ function closewin() {
     document.body.removeChild(document.getElementById("alertmsgDiv"));
 }
 
-
+// 运行脚本
 $(document).on("click", ".run",
     function () {
         var t = $(this)
@@ -139,6 +139,8 @@ $(document).on("click", ".run",
             })
         }
     })
+
+
 //打开报告文件
 $(document).on("click", ".report",
     function () {
@@ -162,8 +164,56 @@ $(document).on({
 
 // 上传
 $(document).on("click", ".upload", function () {
-    $(".el-wrapper").css({"display": "block"})
-    console.log("click-upload")
+    $(".el-wrapper").css({"display": "flex"});
+    var html_form = '';
+    console.log("click-upload");
+    $.ajax({
+        url: 'http://192.168.0.80:5000/api/v1/get_pm',
+        type: 'get',
+        success: function (result) {
+            if (result.code === 100) {
+                let data = result.data;
+                html_form += '文件名:<input type="text" name="file_name" id="file_name">\n'
+                html_form += '选择模块:'
+                html_form += '<select name="module">\n';
+                for (i in data) {
+                    console.log("i=" + i)
+                    html_form += '<optgroup label="' + i + '">\n'
+                    for (j in data[i]) {
+                        html_form += '<option value="' + Object.keys(data[i][j]) + '">' + Object.values(data[i][j]) + '</option>\n';
+                    }
+                    html_form += '</optgroup>\n'
+                }
+                html_form += '</select>\n';
+                html_form +='<input type="file" id="myfile" name="file">\n</br>' +
+                    '<label><input type="radio" name="type" value="0" checked>用例</label><label><input type="radio" name="type" value="1">脚本</label></br>' +
+                    '<button id="confirm-upload" type="submit" style="margin-left: 130px" >确定</button>\n' +
+                    '<button id="form-close" type="button" name="取消">取消</button>';
+                $('#upload').html(html_form);
+            } else {
+                alert("操作失败");
+            }
+        }
+    })
+})
+
+// 获取上传的文件名赋值
+$(document).on("change","#myfile",function () {
+    file = $(this).val();
+    file_name = file.split("\\").pop();
+    file_name = file_name.substring(0, file_name.lastIndexOf("."));
+    console.log(file_name)
+    $("#file_name").val(file_name)
+})
+
+// 确认提交
+$(document).on("click","#confirm-upload",function (){
+    $(".el-wrapper").css({"display": "none"})
+})
+
+// 关闭弹窗
+$(document).on("click", "#form-close", function () {
+    $(".el-wrapper").css({"display": "none"})
 })
 
 // 模块选择
@@ -172,15 +222,15 @@ $(document).on("click", ".boxc-2", function () {
     $(this).css("background", "black");
     var name = $(this).attr("name")
     var html_body = ""
-    if (name === "case") {
+    if (name === "0") {
         html_body += "<table class=\"hovertable\">\n" +
             "        <thead>\n" +
             "        <tr>\n" +
             "            <th style=\"width: 5%\">序号</th>\n" +
             "            <th style=\"width: 15%\">项目</th>\n" +
             "            <th style=\"width: 15%\">模块</th>\n" +
-            "            <th style=\"width: 30%\">文件</th>\n" +
             "            <th style=\"width: 30%\">时间</th>\n" +
+            "            <th style=\"width: 30%\">文件</th>\n" +
             "            <th>操作</th>\n" +
             "        </tr>\n" +
             "        </thead>\n" +
@@ -212,16 +262,18 @@ $(document).on("click", ".boxc-2", function () {
                 console.log(data);
                 let n = 0
                 for (i in data) {
-                    n +=1
-                    console.log(data[i][1]);
-                    html_body += "<tr>\n" +
-                        "<td style=\"width: 5%\">" + n + "</td>\n" +
-                        "<td style=\"width: 15%\">" + data[i][0] + "</td>\n" +
-                        "<td style=\"width: 15%\">" + data[i][1] + "</td>\n" +
-                        "<td style=\"width: 30%\">" + data[i][2] + "</td>\n" +
-                        "<td class=\"report\" style=\"width: 30%\">" + data[i][3] + "</td>\n" +
-                        "<td class=\"run\" style='width:5%' data=\"" + i + "\">运行</td>\n" +
-                        "</tr>\n";
+                    console.log("i=" + i)
+                    for (j in data[i]) {
+                        n += 1
+                        html_body += "<tr>\n" +
+                            "<td style=\"width: 5%\">" + n + "</td>\n" +
+                            "<td style=\"width: 15%\">" + data[i][j][0] + "</td>\n" +
+                            "<td style=\"width: 15%\">" + i + "</td>\n" +
+                            "<td style=\"width: 30%\">" + data[i][j][1] + "</td>\n" +
+                            "<td class=\"report\" style=\"width: 30%\">" + data[i][j][2] + "</td>\n" +
+                            "<td class=\"download\" style='width:5%' data=\"" + data[i][j][4] + "\">"+data[i][j][3]+"</td>\n" +
+                            "</tr>\n";
+                    }
                 }
                 html_body += "</tbody>";
                 html_body += "</table>";
@@ -232,4 +284,11 @@ $(document).on("click", ".boxc-2", function () {
     })
 
     console.log("click .boxc-2", $(this).attr("name"))
+})
+
+// 下载文件
+$(document).on("click",".download",function (){
+    fid = $(this).attr("data");
+    console.log(fid)
+    window.open("http://192.168.0.80:5000/api/v1/download/"+fid)
 })
