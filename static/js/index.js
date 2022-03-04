@@ -21,9 +21,11 @@ window.onload = $(function myFun() {
 
 })
 
+// 项目模块
 $(document).on("click",".boxc-1",function (){
     html_body = '<h1>项目</h1>';
-    console.log("click")
+    $(".boxc-2").css("background","")
+    $(this).css("background","black")
     $(".boxb").html(html_body)
 })
 
@@ -236,6 +238,7 @@ $(document).on("click", "#form-close", function () {
 // 模块选择
 $(document).on("click", ".boxc-2", function () {
     $(".boxc-2").css("background", "");
+    $(".boxc-1").css("background", "");
     $(this).css("background", "black");
     var name = $(this).attr("name")
     var html_body = ""
