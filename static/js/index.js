@@ -4,12 +4,29 @@ window.onload = $(function myFun() {
         type: "get",
         success: function (result) {
             if (100 === result.code) {
-                console.log('success')
+                console.log("success");
+                html_body = '<select>' +
+                    '<option>项目1</option>' +
+                    '<option>项目2</option>' +
+                    '</select>';
+                html_body += '<select>' +
+                    '<option>项目1</option>' +
+                    '<option>项目2</option>' +
+                    '</select>';
+                $(".boxb-1").html(html_body);
             }
 
         }
     })
+
 })
+
+$(document).on("click",".boxc-1",function (){
+    html_body = '<h1>项目</h1>';
+    console.log("click")
+    $(".boxb").html(html_body)
+})
+
 // 运行脚本
 window.alert = function Alert(str) {
     var msgw, msgh, bordercolor;
@@ -92,53 +109,53 @@ function closewin() {
 }
 
 // 运行脚本
-$(document).on("click", ".run",
-    function () {
-        var t = $(this)
-        $.confirm({
-            title: '确认',
-            content: '确认执行?',
-            type: 'green',
-            icon: 'glyphicon glyphicon-question-sign',
-            buttons: {
-                ok: {
-                    text: '确认',
-                    btnClass: 'btn-primary',
-                    action: function () {
-                        run_script();
-                    }
-                },
-                cancel: {
-                    text: '取消',
-                    btnClass: 'btn-primary',
-                }
-            }
-        })
-
-        function run_script() {
-            var case_name = t.attr("data")
-            var data = {"case_name": case_name}
-            console.log(data)
-            $.ajax({
-                url: "http://192.168.0.80:5000/api/v1/record",
-                type: "post",
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify(data),
-                success: function (result) {
-                    if (result.code === 100) {
-                        alert("执行成功")
-                    } else {
-                        alert("调试文件不可执行", false, false)
-                    }
-                },
-                error: function () {
-                    alert("服务器繁忙", "456")
-                }
-
-            })
-        }
-    })
+// $(document).on("click", ".run",
+//     function () {
+//         var t = $(this)
+//         $.confirm({
+//             title: '确认',
+//             content: '确认执行?',
+//             type: 'green',
+//             icon: 'glyphicon glyphicon-question-sign',
+//             buttons: {
+//                 ok: {
+//                     text: '确认',
+//                     btnClass: 'btn-primary',
+//                     action: function () {
+//                         run_script();
+//                     }
+//                 },
+//                 cancel: {
+//                     text: '取消',
+//                     btnClass: 'btn-primary',
+//                 }
+//             }
+//         })
+//
+//         function run_script() {
+//             var case_name = t.attr("data")
+//             var data = {"case_name": case_name}
+//             console.log(data)
+//             $.ajax({
+//                 url: "http://192.168.0.80:5000/api/v1/record",
+//                 type: "post",
+//                 contentType: 'application/json',
+//                 dataType: 'json',
+//                 data: JSON.stringify(data),
+//                 success: function (result) {
+//                     if (result.code === 100) {
+//                         alert("执行成功")
+//                     } else {
+//                         alert("调试文件不可执行", false, false)
+//                     }
+//                 },
+//                 error: function () {
+//                     alert("服务器繁忙", "456")
+//                 }
+//
+//             })
+//         }
+//     })
 
 
 //打开报告文件
@@ -185,7 +202,7 @@ $(document).on("click", ".upload", function () {
                     html_form += '</optgroup>\n'
                 }
                 html_form += '</select>\n';
-                html_form +='<input type="file" id="myfile" name="file">\n</br>' +
+                html_form += '<input type="file" id="myfile" name="file">\n</br>' +
                     '<label><input type="radio" name="type" value="0" checked>用例</label><label><input type="radio" name="type" value="1">脚本</label></br>' +
                     '<button id="confirm-upload" type="submit" style="margin-left: 130px" >确定</button>\n' +
                     '<button id="form-close" type="button" name="取消">取消</button>';
@@ -198,7 +215,7 @@ $(document).on("click", ".upload", function () {
 })
 
 // 获取上传的文件名赋值
-$(document).on("change","#myfile",function () {
+$(document).on("change", "#myfile", function () {
     file = $(this).val();
     file_name = file.split("\\").pop();
     file_name = file_name.substring(0, file_name.lastIndexOf("."));
@@ -207,7 +224,7 @@ $(document).on("change","#myfile",function () {
 })
 
 // 确认提交
-$(document).on("click","#confirm-upload",function (){
+$(document).on("click", "#confirm-upload", function () {
     $(".el-wrapper").css({"display": "none"})
 })
 
@@ -271,7 +288,7 @@ $(document).on("click", ".boxc-2", function () {
                             "<td style=\"width: 15%\">" + i + "</td>\n" +
                             "<td style=\"width: 30%\">" + data[i][j][1] + "</td>\n" +
                             "<td class=\"report\" style=\"width: 30%\">" + data[i][j][2] + "</td>\n" +
-                            "<td class=\"download\" style='width:5%' data=\"" + data[i][j][4] + "\">"+data[i][j][3]+"</td>\n" +
+                            "<td class=\"download\" style='width:5%' data=\"" + data[i][j][4] + "\">" + data[i][j][3] + "</td>\n" +
                             "</tr>\n";
                     }
                 }
@@ -282,13 +299,11 @@ $(document).on("click", ".boxc-2", function () {
             }
         },
     })
-
-    console.log("click .boxc-2", $(this).attr("name"))
 })
 
 // 下载文件
-$(document).on("click",".download",function (){
+$(document).on("click", ".download", function () {
     fid = $(this).attr("data");
     console.log(fid)
-    window.open("http://192.168.0.80:5000/api/v1/download/"+fid)
+    window.open("http://192.168.0.80:5000/api/v1/download/" + fid)
 })

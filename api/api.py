@@ -133,8 +133,9 @@ def get_list():
             pid = m.project_id
             pname = Project.query.filter_by(id=pid).first().project_name
             data[mname] = []
-            doc = m.docs
+            doc = m.docs.order_by(Documents.upload_time.desc())
             for d in doc:
+                print(d.upload_time)
                 if d.status == type:
                     if type == '0':
                         li = [pname, str(d.upload_time), d.display_name, "下载", d.id]

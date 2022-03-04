@@ -29,6 +29,11 @@ body{
     border-bottom: 0;
     border-right: 0;
 }
+.boxb-1 {
+    height: 91%;
+    overflow: auto;
+    box-sizing: border-box;
+}
 
 .ssvg {
     margin-left: 20px;
