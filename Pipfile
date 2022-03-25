@@ -1,15 +1,20 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
 redis = "*"
 flask-sqlalchemy = "*"
 flask-script = "*"
 flask-migrate = "==2.6.0"
 pymysql = "*"
+flask-sockets = "*"
+werkzeug = "==1.0.1"
+gevent = "*"
+flask-socketio = "*"
+flask = "*"
+markupsafe = "==2.0.1"
 
 [dev-packages]
 

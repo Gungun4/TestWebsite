@@ -2,7 +2,7 @@ import hashlib
 import json
 import mimetypes
 
-from flask import Blueprint, request, jsonify, make_response, send_from_directory, render_template
+from flask import Blueprint, request, jsonify, make_response
 
 from config import SCRIPT_PATH
 from exts import db
@@ -135,12 +135,11 @@ def get_list():
             data[mname] = []
             doc = m.docs.order_by(Documents.upload_time.desc())
             for d in doc:
-                print(d.upload_time)
                 if d.status == type:
                     if type == '0':
-                        li = [pname, str(d.upload_time), d.display_name, "下载", d.id]
+                        li = [pname, d.display_name, d.info, "<span id=download>\t下载</span>", d.id]
                     else:
-                        li = [pname, d.display_name, d.display_name + '.html', "运行", d.id]
+                        li = [pname, d.display_name, d.info, "<span id=run>运行\t</span><span id=download>\t下载</span>", d.id]
                     data[mname].append(li)
         return jsonify({"code": 100, "data": data, "msg": "操作成功"})
     except Exception as e:
@@ -161,11 +160,10 @@ def get_pm():
             modules = Module.query.filter_by(project_id=p.id, status='0').all()
             for m in modules:
                 data[p.project_name].append({m.id: m.module_name})
-        return jsonify({"code": 100, "data": data, "msg": ""})
+        return jsonify({"code": 100, "data": data, "msg": "操作成功"})
     except Exception as e:
         print(e)
         return jsonify({"code": 200, "msg": "操作失败"})
-    pass
 
 
 # 下载文件
@@ -177,7 +175,6 @@ def download(fid):
         file_byte = file.file
         response = make_response(file_byte)
         mime_type = file.extension
-        print(mime_type)
         response.headers["Content-Type"] = mime_type
         response.headers["Content-Disposition"] = 'attachment; filename={}'.format(file_name.encode().decode('latin-1'))
         return response

@@ -60,6 +60,7 @@ class Documents(db.Model):
     file = db.Column(db.LargeBinary)
     upload_user = db.Column(db.String(20))
     upload_time = db.Column(db.DateTime, index=True, default=datetime.datetime.now, onupdate=datetime.datetime.now)
+    info = db.Column(db.Text)
     status = db.Column(db.Enum("0", "1", "2"), server_default="0", nullable=False)
     extension = db.Column(db.String(10))
 

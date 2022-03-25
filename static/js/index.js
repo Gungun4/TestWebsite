@@ -3,30 +3,40 @@ window.onload = $(function myFun() {
         url: "http://192.168.0.80:5000/api/v1/ip",
         type: "get",
         success: function (result) {
-            if (100 === result.code) {
-                console.log("success");
-                html_body = '<select>' +
-                    '<option>项目1</option>' +
-                    '<option>项目2</option>' +
-                    '</select>';
-                html_body += '<select>' +
-                    '<option>项目1</option>' +
-                    '<option>项目2</option>' +
-                    '</select>';
-                $(".boxb-1").html(html_body);
-            }
-
         }
     })
-
+    pm_list();
 })
 
+function pm_list() {
+    $.ajax({
+            url: "http://192.168.0.80:5000/api/v1/get_pm",
+            type: "get",
+            success: function (result) {
+                if (100 === result.code) {
+                    data = result.data;
+                    html_body = '';
+                    for (i in data) {
+                        html_body += '<select style="width: 99%; height: 50px;margin:2px 0 0 1px;padding-left: 50px;font-size: 20px">'
+                        html_body += '<option selected>' + i + '</option>';
+                        for (j in data[i]) {
+                            html_body += '<option value="' + Object.keys(data[i][j]) + '">' + Object.values(data[i][j]) + '</option>\n';
+                        }
+                        html_body += '</select>';
+                    }
+                }
+                $(".boxb").html(html_body);
+            }
+        }
+    )
+}
+
+
 // 项目模块
-$(document).on("click",".boxc-1",function (){
-    html_body = '<h1>项目</h1>';
-    $(".boxc-2").css("background","")
-    $(this).css("background","black")
-    $(".boxb").html(html_body)
+$(document).on("click", ".boxc-1", function () {
+    $(".boxc-2").css("background", "");
+    $(this).css("background", "black");
+    pm_list();
 })
 
 // 运行脚本
@@ -161,25 +171,26 @@ function closewin() {
 
 
 //打开报告文件
-$(document).on("click", ".report",
-    function () {
-        var file_name = $(this).text()
-        console.log(file_name)
-        window.open("../static/report/" + file_name)
-    })
+// $(document).on("click", ".report",
+//     function () {
+//         var file_name = $(this).text()
+//         console.log(file_name)
+//         window.open("../static/report/" + file_name)
+//     })
 
-$(document).on({
-    mouseover:
-        function (e) {
-            var y = $(this).offset().top - 75;
-            var x = $(this).offset().left + 170;
-            $("body").append("<div class='tip bottom' style=\"top:" + y + "px;left:" + x + "px;position: absolute\">点击打开报告文件</div>");
-        },
-    mouseout:
-        function () {
-            $(".tip").remove();
-        },
-}, ".report")
+// 鼠标悬停展示
+// $(document).on({
+//     mouseover:
+//         function (e) {
+//             var y = $(this).offset().top - 75;
+//             var x = $(this).offset().left + 170;
+//             $("body").append("<div class='tip bottom' style=\"top:" + y + "px;left:" + x + "px;position: absolute\">点击打开报告文件</div>");
+//         },
+//     mouseout:
+//         function () {
+//             $(".tip").remove();
+//         },
+// }, ".report")
 
 // 上传
 $(document).on("click", ".upload", function () {
@@ -196,7 +207,6 @@ $(document).on("click", ".upload", function () {
                 html_form += '选择模块:'
                 html_form += '<select name="module">\n';
                 for (i in data) {
-                    console.log("i=" + i)
                     html_form += '<optgroup label="' + i + '">\n'
                     for (j in data[i]) {
                         html_form += '<option value="' + Object.keys(data[i][j]) + '">' + Object.values(data[i][j]) + '</option>\n';
@@ -207,7 +217,7 @@ $(document).on("click", ".upload", function () {
                 html_form += '<input type="file" id="myfile" name="file">\n</br>' +
                     '<label><input type="radio" name="type" value="0" checked>用例</label><label><input type="radio" name="type" value="1">脚本</label></br>' +
                     '<button id="confirm-upload" type="submit" style="margin-left: 130px" >确定</button>\n' +
-                    '<button id="form-close" type="button" name="取消">取消</button>';
+                    '<button class="close" type="button" name="取消">取消</button>';
                 $('#upload').html(html_form);
             } else {
                 alert("操作失败");
@@ -230,10 +240,11 @@ $(document).on("click", "#confirm-upload", function () {
     $(".el-wrapper").css({"display": "none"})
 })
 
-// 关闭弹窗
-$(document).on("click", "#form-close", function () {
+function close() {
     $(".el-wrapper").css({"display": "none"})
-})
+    $(".el-wrapper1").css({"display": "none"})
+}
+
 
 // 模块选择
 $(document).on("click", ".boxc-2", function () {
@@ -248,9 +259,9 @@ $(document).on("click", ".boxc-2", function () {
             "        <tr>\n" +
             "            <th style=\"width: 5%\">序号</th>\n" +
             "            <th style=\"width: 15%\">项目</th>\n" +
-            "            <th style=\"width: 15%\">模块</th>\n" +
-            "            <th style=\"width: 30%\">时间</th>\n" +
-            "            <th style=\"width: 30%\">文件</th>\n" +
+            "            <th style=\"width: 10%\">模块</th>\n" +
+            "            <th style=\"width: 30%\">测试用例</th>\n" +
+            "            <th style=\"width: 30%\">描述</th>\n" +
             "            <th>操作</th>\n" +
             "        </tr>\n" +
             "        </thead>\n" +
@@ -261,9 +272,9 @@ $(document).on("click", ".boxc-2", function () {
             "        <tr>\n" +
             "            <th style=\"width: 5%\">序号</th>\n" +
             "            <th style=\"width: 15%\">项目</th>\n" +
-            "            <th style=\"width: 15%\">模块</th>\n" +
+            "            <th style=\"width: 10%\">模块</th>\n" +
             "            <th style=\"width: 30%\">脚本文件</th>\n" +
-            "            <th style=\"width: 30%\">报告文件</th>\n" +
+            "            <th style=\"width: 30%\">描述</th>\n" +
             "            <th>操作</th>\n" +
             "        </tr>\n" +
             "        </thead>\n" +
@@ -288,10 +299,10 @@ $(document).on("click", ".boxc-2", function () {
                         html_body += "<tr>\n" +
                             "<td style=\"width: 5%\">" + n + "</td>\n" +
                             "<td style=\"width: 15%\">" + data[i][j][0] + "</td>\n" +
-                            "<td style=\"width: 15%\">" + i + "</td>\n" +
+                            "<td style=\"width: 10%\">" + i + "</td>\n" +
                             "<td style=\"width: 30%\">" + data[i][j][1] + "</td>\n" +
                             "<td class=\"report\" style=\"width: 30%\">" + data[i][j][2] + "</td>\n" +
-                            "<td class=\"download\" style='width:5%' data=\"" + data[i][j][4] + "\">" + data[i][j][3] + "</td>\n" +
+                            "<td class=\"operation\" style='width:10%' data=\"" + data[i][j][4] + "\">" +  data[i][j][3] + "</td>\n" +
                             "</tr>\n";
                     }
                 }
@@ -305,8 +316,61 @@ $(document).on("click", ".boxc-2", function () {
 })
 
 // 下载文件
-$(document).on("click", ".download", function () {
+$(document).on("click", "#download", function () {
     fid = $(this).attr("data");
     console.log(fid)
-    window.open("http://192.168.0.80:5000/api/v1/download/" + fid)
+    console.log(fid);
+    window.open("http://192.168.0.80:5000/api/v1/download/" + fid);
 })
+
+// socket
+$(document).on("click", '.echo', function () {
+    $(".el-wrapper1").css({"display": "flex"});
+    window.socket = new WebSocket('ws://192.168.0.80:5050/task');
+    socket.onopen = function (event) {
+        console.log("WebSocket is open now.");
+    };
+    socket.onmessage = function (event) {
+        var date = new Date();
+        const formatDate = (current_datetime) => {
+            let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
+            return formatted_date;
+        }
+        $("#textbox").append(formatDate(date) + "  sever msg==> " + event.data + "\n");
+        $("#textbox").scrollTop($("#textbox")[0].scrollHeight);
+    }
+    socket.onerror = function (event) {
+        console.error("WebSocket error observed:", event);
+    };
+
+    socket.onclose = function (event) {
+        console.log("WebSocket is closed now.");
+        // window.setTimeout(function () {
+        //     $("#textbox").text('');
+        // }, 5000);
+
+    };
+})
+
+// 关闭弹窗
+$(document).on("click",".close",function (){
+    close()
+})
+
+// 发送消息
+// $(document).on("click", "#send", function () {
+//     var content = $("#client_box").val();
+//     var date = new Date();
+//     const formatDate = (current_datetime) => {
+//         let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
+//         return formatted_date;
+//     }
+//     if (content) {
+//         socket.send(content);
+//         $("#textbox").append(formatDate(date) + "  client msg==> " + content + '\n')
+//         $("#textbox").scrollTop($("#textbox")[0].scrollHeight);
+//     } else {
+//         alert("can't send null")
+//     }
+//
+// })
