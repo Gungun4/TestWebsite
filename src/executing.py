@@ -63,21 +63,24 @@ class SwPipe():
                 tmp = \
                     self._CRFL + "[PIPE_CODE_ERROR] <Code ERROR: UnicodeDecodeError>\n"\
                 + "[PIPE_CODE_ERROR] Now code is: " + self._code + self._CRFL
-            self._func(self, tmp)
+            # self._func(self, tmp)
+            self._func(tmp)
 
-        funerr = self._process.stderr.readline
-        while True:
-            line = funerr()
-            if not line:
-                break
-            try:
-                tmp = line.decode(self._code)
-            except UnicodeDecodeError:
-                tmp = \
-                    self._CRFL + "[PIPE_CODE_ERROR] <Code ERROR: UnicodeDecodeError>\n" \
-                    + "[PIPE_CODE_ERROR] Now code is: " + self._code + self._CRFL
-            self._func(self, tmp)
-        self._func(self,"Done")
+        # funerr = self._process.stderr.readline
+        # while True:
+        #     line = funerr()
+        #     if not line:
+        #         break
+        #     try:
+        #         tmp = line.decode(self._code)
+        #     except UnicodeDecodeError:
+        #         tmp = \
+        #             self._CRFL + "[PIPE_CODE_ERROR] <Code ERROR: UnicodeDecodeError>\n" \
+        #             + "[PIPE_CODE_ERROR] Now code is: " + self._code + self._CRFL
+        #     # self._func(self, tmp)
+        #     self._func(tmp)
+        # self._func(self,"Done")
+        self._func("Done")
         self._flag = False
         self._exitfunc(LoopException("While Loop break"))  # 正常退出
 

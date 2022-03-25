@@ -1,35 +1,31 @@
 import time
-
-import redis
-
 from src.executing import SwPipe
-
-r = redis.Redis(host='127.0.0.1', port=6379, db=4, decode_responses=True)
-
+from config import SCRIPT_PATH
+import sys
 
 class GetCom():
 
-    def __init__(self, key, path, script_name):
-        self.e = SwPipe("powershell.exe", self.event, self.exit, self.ready)
-        self._key = key
-        self._path = path
+    def __init__(self,script_name,send):
+        self.e = SwPipe("powershell.exe", send, self.exit, self.ready)
+        self._path = SCRIPT_PATH
         self._script_name = script_name
+        # self._send = send
 
-    def event(self, cls, line):
-        lines = time.strftime('%Y-%m-%d %H-%M-%S') + ":" + line.replace("\r\n", "")
-        # 写入redis
-        # r.lpush(self._key, lines)
-        # sys.stdout.write(line)
+    # def event(self, line):
+    #     lines = time.strftime('%Y-%m-%d %H-%M-%S') + ":" + line.replace("\r\n", "")
+    #     # 写入redis
+    #     # r.lpush(self._key, lines)
+    #     self._send(lines)
+    #     # sys.stdout.write(line)
 
     def exit(self, msg):
         print(msg)
 
     def ready(self):
-        # self.e.write("cd D:\PycharmProjects\AutomatedTesting")  # 执行
-        self.e.write(f"cd {self._path}")  # 执行
-        self.e.write("./venv/Scripts/activate")
-        # self.e.write("python ./suiteMain.py")
-        self.e.write(f"python ./{self._script_name} {self._key}")
+        self.e.write(f"cd {self._path}")  # 进入项目目录
+        self.e.write("./venv/Scripts/activate") #激活虚拟环境
+        # self.e.write(f"python ./{self._script_name} {self._key}")
+        self.e.write(f"robot {self._path}{self._script_name}")
         self.e.write("exit")
 
     def run(self):
@@ -37,5 +33,6 @@ class GetCom():
 
 
 if __name__ == '__main__':
-    g = GetCom("time1")
+    g = GetCom("\\test_cases\智慧安监")
     g.run()
+

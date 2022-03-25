@@ -4,6 +4,7 @@ from flask_sockets import Sockets
 from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
 import json
+from src.test_redis import GetCom
 
 app = Flask(__name__)
 sockets = Sockets(app)
@@ -17,11 +18,11 @@ def hello_world():  # put application's code here
 @sockets.route('/task')
 def echo_socket(ws):
     while not ws.closed:
+        g = GetCom("\\test_cases\智慧安监",ws.send)
+        g.run()
         message = ws.receive()  # 接收到消息
         if message is not None:
-            if message == 'close':
-                ws.close()
-            ws.send(message)  # 回传给clicent
+            print(message)
         else:
             print("no receive")
 

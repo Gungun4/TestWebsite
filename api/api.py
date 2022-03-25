@@ -26,14 +26,12 @@ def ip_handle():
 
 
 # 执行脚本
-@api.route('/record', methods=["POST"])
+@api.route('/run/script', methods=["POST"])
 def record():
-    sid = json.loads(request.data)["case_name"]
-    if "aj" not in sid:
-        res = {"code": 200}
-        return res
-    g = GetCom(sid, SCRIPT_PATH, "suiteMain.py")
-    g.run()
+    fid = json.loads(request.data)["fid"]
+    # g = GetCom(fid, SCRIPT_PATH, "suiteMain.py")
+    # g.run()
+    print(fid)
     res = {"code": 100}
     return jsonify(res)
 

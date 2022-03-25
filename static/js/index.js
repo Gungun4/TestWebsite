@@ -39,7 +39,7 @@ $(document).on("click", ".boxc-1", function () {
     pm_list();
 })
 
-// 运行脚本
+// 运行提示框
 window.alert = function Alert(str) {
     var msgw, msgh, bordercolor;
     msgw = 350;//提示窗口的宽度
@@ -121,53 +121,51 @@ function closewin() {
 }
 
 // 运行脚本
-// $(document).on("click", ".run",
-//     function () {
-//         var t = $(this)
-//         $.confirm({
-//             title: '确认',
-//             content: '确认执行?',
-//             type: 'green',
-//             icon: 'glyphicon glyphicon-question-sign',
-//             buttons: {
-//                 ok: {
-//                     text: '确认',
-//                     btnClass: 'btn-primary',
-//                     action: function () {
-//                         run_script();
-//                     }
-//                 },
-//                 cancel: {
-//                     text: '取消',
-//                     btnClass: 'btn-primary',
-//                 }
-//             }
-//         })
-//
-//         function run_script() {
-//             var case_name = t.attr("data")
-//             var data = {"case_name": case_name}
-//             console.log(data)
-//             $.ajax({
-//                 url: "http://192.168.0.80:5000/api/v1/record",
-//                 type: "post",
-//                 contentType: 'application/json',
-//                 dataType: 'json',
-//                 data: JSON.stringify(data),
-//                 success: function (result) {
-//                     if (result.code === 100) {
-//                         alert("执行成功")
-//                     } else {
-//                         alert("调试文件不可执行", false, false)
-//                     }
-//                 },
-//                 error: function () {
-//                     alert("服务器繁忙", "456")
-//                 }
-//
-//             })
-//         }
-//     })
+$(document).on("click", "#run", function () {
+        fid = $(this).parent().attr('data')
+        $.confirm({
+            title: '确认',
+            content: '确认执行?',
+            type: 'green',
+            icon: 'glyphicon glyphicon-question-sign',
+            buttons: {
+                ok: {
+                    text: '确认',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        run_script();
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'btn-primary',
+                }
+            }
+        })
+
+        function run_script() {
+            var data = {"fid": fid}
+            $.ajax({
+                url: "http://192.168.0.80:5000/api/v1/run/script",
+                type: "post",
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.code === 100) {
+                        alert("执行成功")
+                        socket_echo(fid)
+                    } else {
+                        alert("调试文件不可执行", false, false)
+                    }
+                },
+                error: function () {
+                    alert("服务器繁忙", "456")
+                }
+
+            })
+        }
+    })
 
 
 //打开报告文件
@@ -290,10 +288,10 @@ $(document).on("click", ".boxc-2", function () {
                 html_body += "<div style=\"height: 91%;overflow: auto;box-sizing: border-box\">\n";
                 html_body += "<table class=\"hovertable\">\n";
                 html_body += "<tbody>\n";
-                console.log(data);
+                // console.log(data);
                 let n = 0
                 for (i in data) {
-                    console.log("i=" + i)
+                    // console.log("i=" + i)
                     for (j in data[i]) {
                         n += 1
                         html_body += "<tr>\n" +
@@ -317,17 +315,17 @@ $(document).on("click", ".boxc-2", function () {
 
 // 下载文件
 $(document).on("click", "#download", function () {
-    fid = $(this).attr("data");
-    console.log(fid)
-    console.log(fid);
+    fid = $(this).parent().attr("data");
+    // console.log(fid);
     window.open("http://192.168.0.80:5000/api/v1/download/" + fid);
 })
 
 // socket
-$(document).on("click", '.echo', function () {
+function socket_echo(target) {
     $(".el-wrapper1").css({"display": "flex"});
     window.socket = new WebSocket('ws://192.168.0.80:5050/task');
     socket.onopen = function (event) {
+        socket.send(target);
         console.log("WebSocket is open now.");
     };
     socket.onmessage = function (event) {
@@ -336,7 +334,8 @@ $(document).on("click", '.echo', function () {
             let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
             return formatted_date;
         }
-        $("#textbox").append(formatDate(date) + "  sever msg==> " + event.data + "\n");
+        // $("#textbox").append(formatDate(date) + "  sever msg==> " + event.data + "\n");
+        $("#textbox").append(event.data + "\n");
         $("#textbox").scrollTop($("#textbox")[0].scrollHeight);
     }
     socket.onerror = function (event) {
@@ -350,11 +349,12 @@ $(document).on("click", '.echo', function () {
         // }, 5000);
 
     };
-})
+}
 
 // 关闭弹窗
 $(document).on("click",".close",function (){
-    close()
+    close();
+    socket.close()
 })
 
 // 发送消息
