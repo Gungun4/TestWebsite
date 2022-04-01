@@ -122,50 +122,50 @@ function closewin() {
 
 // 运行脚本
 $(document).on("click", "#run", function () {
-        fid = $(this).parent().attr('data')
-        $.confirm({
-            title: '确认',
-            content: '确认执行?',
-            type: 'green',
-            icon: 'glyphicon glyphicon-question-sign',
-            buttons: {
-                ok: {
-                    text: '确认',
-                    btnClass: 'btn-primary',
-                    action: function () {
-                        run_script();
-                    }
-                },
-                cancel: {
-                    text: '取消',
-                    btnClass: 'btn-primary',
+    fid = $(this).parent().attr('data')
+    $.confirm({
+        title: '确认',
+        content: '确认执行?',
+        type: 'green',
+        icon: 'glyphicon glyphicon-question-sign',
+        buttons: {
+            ok: {
+                text: '确认',
+                btnClass: 'btn-primary',
+                action: function () {
+                    run_script();
                 }
+            },
+            cancel: {
+                text: '取消',
+                btnClass: 'btn-primary',
             }
-        })
-
-        function run_script() {
-            var data = {"fid": fid}
-            $.ajax({
-                url: "http://192.168.0.80:5000/api/v1/run/script",
-                type: "post",
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify(data),
-                success: function (result) {
-                    if (result.code === 100) {
-                        alert("执行成功")
-                        socket_echo(fid)
-                    } else {
-                        alert("调试文件不可执行", false, false)
-                    }
-                },
-                error: function () {
-                    alert("服务器繁忙", "456")
-                }
-
-            })
         }
     })
+
+    function run_script() {
+        var data = {"fid": fid}
+        $.ajax({
+            url: "http://192.168.0.80:5000/api/v1/run/script",
+            type: "post",
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: function (result) {
+                if (result.code === 100) {
+                    // alert("执行成功")
+                    socket_echo(fid)
+                } else {
+                    alert("调试文件不可执行", false, false)
+                }
+            },
+            error: function () {
+                alert("服务器繁忙", "")
+            }
+
+        })
+    }
+})
 
 
 //打开报告文件
@@ -238,7 +238,7 @@ $(document).on("click", "#confirm-upload", function () {
     $(".el-wrapper").css({"display": "none"})
 })
 
-function close() {
+function hide() {
     $(".el-wrapper").css({"display": "none"})
     $(".el-wrapper1").css({"display": "none"})
 }
@@ -300,7 +300,7 @@ $(document).on("click", ".boxc-2", function () {
                             "<td style=\"width: 10%\">" + i + "</td>\n" +
                             "<td style=\"width: 30%\">" + data[i][j][1] + "</td>\n" +
                             "<td class=\"report\" style=\"width: 30%\">" + data[i][j][2] + "</td>\n" +
-                            "<td class=\"operation\" style='width:10%' data=\"" + data[i][j][4] + "\">" +  data[i][j][3] + "</td>\n" +
+                            "<td class=\"operation\" style='width:10%' data=\"" + data[i][j][4] + "\">" + data[i][j][3] + "</td>\n" +
                             "</tr>\n";
                     }
                 }
@@ -322,39 +322,55 @@ $(document).on("click", "#download", function () {
 
 // socket
 function socket_echo(target) {
-    $(".el-wrapper1").css({"display": "flex"});
+    var num = 0;
     window.socket = new WebSocket('ws://192.168.0.80:5050/task');
     socket.onopen = function (event) {
+        $(".el-wrapper1").css({"display": "flex"});
+        $(".point").remove()
+        $("#msgbox").text('');
         socket.send(target);
         console.log("WebSocket is open now.");
     };
     socket.onmessage = function (event) {
+        num += 1
         var date = new Date();
         const formatDate = (current_datetime) => {
             let formatted_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds();
             return formatted_date;
         }
-        // $("#textbox").append(formatDate(date) + "  sever msg==> " + event.data + "\n");
-        $("#textbox").append(event.data + "\n");
-        $("#textbox").scrollTop($("#textbox")[0].scrollHeight);
+        // $("#msgbox").append(formatDate(date) + "  sever msg==> " + event.data + "\n");
+        console.log(num + event.data)
+        $("#msgbox").append(event.data + "\n");
+        $("#msgbox").scrollTop($("#msgbox")[0].scrollHeight);
     }
     socket.onerror = function (event) {
         console.error("WebSocket error observed:", event);
     };
 
     socket.onclose = function (event) {
+        if ($(".point").length > 0) {
+            $(".point").remove();
+            $(".boxa").append("<div class='point' style='background: #00DB00'></div>");
+        }
         console.log("WebSocket is closed now.");
-        // window.setTimeout(function () {
-        //     $("#textbox").text('');
-        // }, 5000);
-
+        socket = null;
     };
 }
 
-// 关闭弹窗
-$(document).on("click",".close",function (){
-    close();
-    socket.close()
+// 隐藏msg弹窗
+$(document).on("click", ".hide", function () {
+    hide();
+    if (socket) {
+        $(".boxa").append("<div class=\"point point-flicker\"></div>");
+    } else {
+        $(".boxa").append("<div class='point' style='background: #00DB00'></div>");
+    }
+
+})
+
+$(document).on("click", ".close_socket", function () {
+    hide();
+    socket.send('close')
 })
 
 // 发送消息
@@ -367,10 +383,16 @@ $(document).on("click",".close",function (){
 //     }
 //     if (content) {
 //         socket.send(content);
-//         $("#textbox").append(formatDate(date) + "  client msg==> " + content + '\n')
-//         $("#textbox").scrollTop($("#textbox")[0].scrollHeight);
+//         $("#msgbox").append(formatDate(date) + "  client msg==> " + content + '\n')
+//         $("#msgbox").scrollTop($("#msgbox")[0].scrollHeight);
 //     } else {
 //         alert("can't send null")
 //     }
 //
 // })
+
+
+$(document).on("click", ".point", function () {
+    $(".el-wrapper1").css({"display": "flex"})
+    $(this).remove()
+})

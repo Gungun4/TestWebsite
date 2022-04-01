@@ -6,17 +6,15 @@ import sys
 class GetCom():
 
     def __init__(self,script_name,send):
-        self.e = SwPipe("powershell.exe", send, self.exit, self.ready)
+        self.e = SwPipe("powershell.exe", self.event, self.exit, self.ready)
         self._path = SCRIPT_PATH
         self._script_name = script_name
-        # self._send = send
+        self._send = send
 
-    # def event(self, line):
-    #     lines = time.strftime('%Y-%m-%d %H-%M-%S') + ":" + line.replace("\r\n", "")
-    #     # 写入redis
-    #     # r.lpush(self._key, lines)
-    #     self._send(lines)
-    #     # sys.stdout.write(line)
+    def event(self, line):
+        lines = line.replace("\r\n", "")
+        self._send(lines)
+        # sys.stdout.write(line)
 
     def exit(self, msg):
         print(msg)

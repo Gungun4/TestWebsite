@@ -1,13 +1,15 @@
+import threading
 import time
+
 from flask import Flask
 from flask_sockets import Sockets
 from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
-import json
+
 from src.test_redis import GetCom
 
 app = Flask(__name__)
-sockets = Sockets(app)
+socket = Sockets(app)
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -15,16 +17,23 @@ def hello_world():  # put application's code here
     return ''
 
 
-@sockets.route('/task')
+@socket.route('/task')
 def echo_socket(ws):
+    def send():
+        while not ws.closed:
+            time.sleep(1)
+            ws.send(str(threading.current_thread().ident))
+
+    threading.Thread(target=send).start()
+
     while not ws.closed:
-        g = GetCom("\\test_cases\智慧安监",ws.send)
-        g.run()
-        message = ws.receive()  # 接收到消息
-        if message is not None:
-            print(message)
+        msg = ws.receive()
+        if msg:
+            print(msg)
+            if msg == 'close':
+                ws.close()
         else:
-            print("no receive")
+            print('not receive')
 
 
 if __name__ == '__main__':

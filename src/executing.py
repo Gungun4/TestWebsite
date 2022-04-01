@@ -66,19 +66,19 @@ class SwPipe():
             # self._func(self, tmp)
             self._func(tmp)
 
-        # funerr = self._process.stderr.readline
-        # while True:
-        #     line = funerr()
-        #     if not line:
-        #         break
-        #     try:
-        #         tmp = line.decode(self._code)
-        #     except UnicodeDecodeError:
-        #         tmp = \
-        #             self._CRFL + "[PIPE_CODE_ERROR] <Code ERROR: UnicodeDecodeError>\n" \
-        #             + "[PIPE_CODE_ERROR] Now code is: " + self._code + self._CRFL
-        #     # self._func(self, tmp)
-        #     self._func(tmp)
+        funerr = self._process.stderr.readline
+        while True:
+            line = funerr()
+            if not line:
+                break
+            try:
+                tmp = line.decode(self._code)
+            except UnicodeDecodeError:
+                tmp = \
+                    self._CRFL + "[PIPE_CODE_ERROR] <Code ERROR: UnicodeDecodeError>\n" \
+                    + "[PIPE_CODE_ERROR] Now code is: " + self._code + self._CRFL
+            # self._func(self, tmp)
+            self._func(tmp)
         # self._func(self,"Done")
         self._func("Done")
         self._flag = False
@@ -108,7 +108,7 @@ if __name__ == '__main__':
 
     e = None
     # 反馈函数
-    def event(cls, line):  # 输出反馈函数
+    def event(line):  # 输出反馈函数
         print(time.strftime('%Y-%m-%d %H-%M-%S'),end=':')
         sys.stdout.write(line)
 

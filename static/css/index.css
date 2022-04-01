@@ -1,14 +1,16 @@
-body{
+body {
     /*float:left;*/
     display: flow-root;
 }
+
 .boxc {
     position: fixed;
-    background:#606266;
+    background: #606266;
     height: 100%;
     width: 10%;
     z-index: 100;
 }
+
 .boxa {
     /*display:flex;*/
     padding-left: 0;
@@ -18,17 +20,18 @@ body{
     height: 40px;
     float: left;
     z-index: 100;
-    left:10%;
+    left: 10%;
 }
 
 .boxb {
     padding: 40px 0 0 10%;
     margin: 0 0 0 0;
-    overflow:auto;
-    border:1px solid gray;
+    overflow: auto;
+    border: 1px solid gray;
     border-bottom: 0;
     border-right: 0;
 }
+
 .boxb-1 {
     height: 91%;
     overflow: auto;
@@ -42,6 +45,7 @@ body{
     /*background-color: #ffffff;*/
     float: left;
 }
+
 .stxt {
     margin-left: 0px;
     margin-top: 8px;
@@ -52,7 +56,7 @@ body{
     float: left;
 }
 
-.boxc-1{
+.boxc-1 {
     width: 100%;
     height: 40px;
     text-align: center;
@@ -60,7 +64,8 @@ body{
     border-bottom: 2px white solid;
     border-right: 2px white solid;
 }
-.boxc-1 span{
+
+.boxc-1 span {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -70,7 +75,8 @@ body{
     -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
-.boxc-2{
+
+.boxc-2 {
     width: 100%;
     height: 60px;
     text-align: center;
@@ -78,7 +84,8 @@ body{
     border-bottom: 2px white solid;
     border-right: 2px white solid;
 }
-.boxc-2 span{
+
+.boxc-2 span {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -90,7 +97,8 @@ body{
     font-size: 22px;
     color: white;
 }
-.el-wrapper{
+
+.el-wrapper {
     position: fixed;
     top: 0;
     right: 0;
@@ -99,12 +107,13 @@ body{
     overflow: hidden;
     margin: 0;
     display: none;
-    flex-direction:column;
+    flex-direction: column;
     justify-content: center;
     background-color: rgba(224, 231, 245, 0.31);
     z-index: 999;
 }
-.el-wrapper1{
+
+.el-wrapper1 {
     position: fixed;
     top: 0;
     right: 0;
@@ -113,7 +122,7 @@ body{
     overflow: hidden;
     margin: 0;
     display: none;
-    flex-direction:column;
+    flex-direction: column;
     justify-content: center;
     background-color: rgba(224, 231, 245, 0.31);
     z-index: 999;
@@ -245,7 +254,7 @@ table.hovertable td {
 ">#0099FF;
 }
 
-.form-div{
+.form-div {
     width: 435px;
     height: 50%;
     position: absolute;
@@ -254,70 +263,132 @@ table.hovertable td {
     border: black;
 }
 
-#upload button{
+#upload button {
     height: 6%;
     width: 20%;
-    margin-top:10px;
+    margin-top: 10px;
 }
-#upload input{
+
+#upload input {
     height: 5%;
-    margin-top:10px;
+    margin-top: 10px;
 }
-#upload select{
+
+#upload select {
     height: 5%;
-    margin-top:10px;
+    margin-top: 10px;
 }
-#upload{
+
+#upload {
     font-size: 20px;
-    margin-top:10px;
+    margin-top: 10px;
 }
-.run{
+
+.run {
     color: #89c2f1;
 }
-.report{
+
+.report {
     color: #89c2f1;
 }
 
 .tip {
-            position: relative;
-            background-color: gray;
-            margin: 20px auto;
-            width: 200px;
-            height: 43px;
-            line-height: 43px;
-            color: white;
-            text-align: center;
-            border-radius: 10px;
-            font-family: sans-serif;
-        }
-        .tip:after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 0;
-            border: 8px solid;
-        }
-        .top:after {
-            border-bottom-color: deepskyblue;
-            left: 50%;
-            bottom: 100%;
-            margin-left: -15px;
-        }
-        .right:after {
-            border-left-color: deepskyblue;
-            left: 100%;
-            top: 50%;
-            margin-top: -7px;
-        }
-        .bottom:after {
-            border-top-color: gray;
-            top: 100%;
-            left: 50%;
-            margin-left: -15px;
-        }
-        .left:after {
-            border-right-color: deepskyblue;
-            top: 50%;
-            right: 100%;
-            margin-top: -9px;
-        }
+    position: relative;
+    background-color: gray;
+    margin: 20px auto;
+    width: 200px;
+    height: 43px;
+    line-height: 43px;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    font-family: sans-serif;
+}
+
+.tip:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 8px solid;
+}
+
+.top:after {
+    border-bottom-color: deepskyblue;
+    left: 50%;
+    bottom: 100%;
+    margin-left: -15px;
+}
+
+.right:after {
+    border-left-color: deepskyblue;
+    left: 100%;
+    top: 50%;
+    margin-top: -7px;
+}
+
+.bottom:after {
+    border-top-color: gray;
+    top: 100%;
+    left: 50%;
+    margin-left: -15px;
+}
+
+.left:after {
+    border-right-color: deepskyblue;
+    top: 50%;
+    right: 100%;
+    margin-top: -9px;
+}
+
+/*   圆点闪烁动画     */
+.point {
+    width: 16px;
+    height: 16px;
+    background-color: #ce0909;
+    position: relative;
+    padding: 0;
+    margin: 11px 97%;
+    border-radius: 50%;
+}
+
+/* 设置动画前颜色 */
+.point-flicker:after {
+    background-color: #ce0909;
+}
+
+/* 设置动画后颜色 */
+.point-flicker:before {
+    background-color: rgb(206, 9, 9);
+}
+
+/* 设置动画 */
+.point-flicker:before,
+.point-flicker:after {
+    content: '';
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -15px;
+    margin-top: -15px;
+    border-radius: 50%;
+    animation: warn 1.5s ease-out 0s infinite;
+}
+/* @keyframes 规则用于创建动画。在 @keyframes 中规定某项 CSS 样式，就能创建由当前样式逐渐改为新样式的动画效果。 */
+@keyframes warn {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
